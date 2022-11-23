@@ -1,28 +1,59 @@
-body{
+body {
     text-align: center;
-    background-color: rgb(220, 212, 212);
+    background-image: url(../img/background.jpg);
+    background-size: cover;
 }
-table{
- background-color: rgb(197, 191, 191);
- margin-left: auto;
- margin-right: auto;
+
+h1 {
+    color: rgb(187, 186, 186);
 }
+.level{
+    background-color: rgb(65, 63, 63);
+    color: whitesmoke;
+    border-radius: 20%;
+    height: 30px;
+    margin-right: 5px;
+    cursor: pointer;
+
+}
+table {
+    background-color: rgb(197, 191, 191);
+    margin-left: auto;
+    margin-right: auto;
+}
+
 .cell {
-    width: 40px;
-    height: 40px;
+    cursor: pointer;
+    width: 30px;
+    height: 30px;
     text-align: center;
     font-size: 1.5em;
     border: solid 2px rgb(72, 69, 69);
-  }
+}
 
-  .isShown{
+.isShown {
     background-color: rgb(104, 103, 103);
-  }
+}
 
-  .haedLine{
+.head-line {
     height: 30px;
     width: 140px;
-    background-color: rgb(187, 100, 42);
+    background-color: rgb(171, 168, 166);
     margin: auto;
     margin-bottom: 10px;
-  }
+}
+
+.gameMode {
+    cursor: pointer;
+    background-color: rgb(218, 136, 136);
+    border: none;
+    font-size: 20px;
+    margin-bottom: 5px;
+
+}
+
+.hint{
+    background-color: rgb(255, 255, 255);
+    border: none;
+    border-radius: 50%;
+}
