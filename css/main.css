@@ -1,0 +1,28 @@
+body{
+    text-align: center;
+    background-color: rgb(220, 212, 212);
+}
+table{
+ background-color: rgb(197, 191, 191);
+ margin-left: auto;
+ margin-right: auto;
+}
+.cell {
+    width: 40px;
+    height: 40px;
+    text-align: center;
+    font-size: 1.5em;
+    border: solid 2px rgb(72, 69, 69);
+  }
+
+  .isShown{
+    background-color: rgb(104, 103, 103);
+  }
+
+  .haedLine{
+    height: 30px;
+    width: 140px;
+    background-color: rgb(187, 100, 42);
+    margin: auto;
+    margin-bottom: 10px;
+  }
