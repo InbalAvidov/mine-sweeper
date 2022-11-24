@@ -14,7 +14,8 @@ function buildBoard() {
                 minesAroundCount: 0,
                 isShown: false,
                 isMine: false,
-                isMarked: false
+                isMarked: false,
+                isHint: false
             }
         }
 
@@ -22,4 +23,5 @@ function buildBoard() {
     return board
 
 }
+
 

@@ -9,6 +9,9 @@ var gCountMines
 var gLives
 var gElLives
 var gHint
+var seconds
+var gEmptyCells
+var numOfClicks
 
 
 
@@ -27,7 +30,11 @@ function reset() {
     gCountMines = 0
     gFirstClick = false
     gHint = false
-    console.log(gHint);
+    numOfClicks = 3
+    const elHint = document.querySelectorAll(".hint")
+    elHint.forEach((Element) => { Element.hidden = false })
+    const elSafe = document.querySelectorAll(".safe")
+    elSafe.forEach((Element) => { Element.hidden = false })
     gElLives = document.querySelector(".lives")
     if (gLevel.mines === 2) {
         gLives = 2
@@ -142,7 +149,7 @@ function countMines(pos, board) {
 
 function cellMarked(ev, elCell, i, j) {
     ev.preventDefault()
-    if (gBoard[i][j].isShown) return
+    if (gBoard[i][j].isShown && !gBoard[i][j].isMine) return
     if (gBoard[i][j].isMarked) {
         elCell.innerText = ''
         elCell.classList.remove("isShown")
@@ -160,7 +167,7 @@ function timer() {
     const elTimer = document.querySelector(".time")
     var start = Date.now()
     gTimeInterval = setInterval(() => {
-        const seconds = (Date.now() - start) / 1000
+        seconds = (Date.now() - start) / 1000
         elTimer.innerText = seconds.toFixed(2)
     }, 1)
 }
@@ -194,6 +201,7 @@ function checkGameOver() {
         clearInterval(gTimeInterval)
         const elGameMode = document.querySelector(".gameMode")
         elGameMode.innerText = '😎'
+        if (seconds) bestScore(seconds)
     }
 
 }
@@ -211,8 +219,11 @@ function expandShown(board, posI, posJ) {
             if (board[i][j].minesAroundCount === 0) elCell.innerText = ''
             else elCell.innerText = board[i][j].minesAroundCount
             elCell.classList.add("isShown")
-            board[i][j].isShown = true
-
+            if (gHint && !board[i][j].isShown) {
+                board[i][j].isHint = true
+                if (board[i][j].isMine) elCell.innerText = MINE
+            }
+            else board[i][j].isShown = true
         }
     }
 }
@@ -223,21 +234,53 @@ function hideNegs(board, posI, posJ) {
         for (var j = posJ - 1; j <= posJ + 1; j++) {
             const elCell = document.querySelector(`[data-i="${i}"][data-j="${j}"] `)
             if (j < 0 || j >= board[i].length) continue
-            console.log('hi')
-            elCell.innerText = ''
-            elCell.classList.remove("isShown")
-            board[i][j].isShown = false
+            if (board[i][j].isHint) {
+                elCell.innerText = ''
+                elCell.classList.remove("isShown")
+                board[i][j].isHint = false
+
+            }
 
         }
     }
 }
 function changeHint(button) {
-    button.classList.add("hidden")
+    if (!gFirstClick) return
     button.hidden = true
     gHint = true
 }
 function hint(i, j) {
     expandShown(gBoard, i, j)
-    setTimeout (()=>{hideNegs(gBoard,i,j)},2000)
+    setTimeout(() => { hideNegs(gBoard, i, j) }, 2000)
     gHint = false
+}
+
+function bestScore(seconds) {
+    const elBest = document.querySelector(".best")
+    var minTime = Infinity
+    if (+seconds < minTime) minTime = seconds
+    elBest.innerText = seconds
+}
+
+function safeClick(elSafe) {
+    if (!gFirstClick) return
+    const clicks = document.querySelector(".clickNum")
+    numOfClicks--
+    if (numOfClicks >= 0) {
+        clicks.innerText = numOfClicks
+        console.log('numOfClicks:', numOfClicks)
+        var i = getRandomInt(0, gBoard.length)
+        var j = getRandomInt(0, gBoard.length)
+        const currCell = gBoard[i][j]
+        if (currCell.isShown || currCell.isMine) {
+            safeClick()
+            return
+        }
+        const elCell = document.querySelector(`[data-i="${i}"][data-j="${j}"] `)
+        elCell.classList.add("safe-click")
+        setTimeout(() => { elCell.classList.remove("safe-click") }, 1000)
+        return
+
+    }else return
+
 }

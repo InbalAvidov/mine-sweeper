@@ -15,7 +15,8 @@
     <button class="level" onclick="initGame(8,14)">Medium</button>
     <button class="level" onclick="initGame(12,32)">Hard</button>
     <div class="head-line">
-        <h3> </span> timer: <span class="time"></span> </h3>
+        <h3> timer: <span class="time"></span></h3>
+        <h3> Best Score: <span class="best"></span></h3>
     </div>
     <button class="gameMode" onclick="initGame(4,2)"></button>
     <table>
@@ -23,9 +24,12 @@
         </tbody>
     </table>
     <p><span class="lives"></span></p>
-    <button class="hint" onclick="changeHint(this)">💡</button>
-    <button class="hint" onclick="changeHint(this)">💡</button>
-    <button class="hint" onclick="changeHint(this)">💡</button>
+    <button hidden class="hint" onclick="changeHint(this)">💡</button>
+    <button hidden class="hint" onclick="changeHint(this)">💡</button>
+    <button hidden class="hint" onclick="changeHint(this)">💡</button>
+    <br>
+    <button hidden class="safe" onclick="safeClick(this)">Safe Clicks : <span class="clickNum">3</span></button>
+
     <script src="js/utils.js">  </script>
     <script src="js/main.js">  </script>
 </body>
