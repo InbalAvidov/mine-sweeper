@@ -39,12 +39,10 @@ function resetFeaturs() {
     numOfClicks = 3
     const elHint = document.querySelectorAll(".hint")
     elHint.forEach((Element) => { Element.hidden = false })
-    const elSafe = document.querySelectorAll(".safe")
     const elclickNums = document.querySelector(".clickNum")
     elclickNums.innerText = numOfClicks
-    elSafe.forEach((Element) => { Element.hidden = false })
-    const elButton = document.querySelector(".DIY")
-    elButton.style.backgroundColor = "lightseagreen"
+    const elButtons = document.querySelector(".button-style")
+    elButtons.style.backgroundColor = "lightseagreen"
     gLocateMines = false
     gElLives = document.querySelector(".lives")
     if (gLevel.mines === 2) {

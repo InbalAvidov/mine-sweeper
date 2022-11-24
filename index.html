@@ -18,21 +18,21 @@
         <button class="gameMode" onclick="initGame(4,2)"></button>
         <table>
             <div class="left">
+                <button class="button-style" onclick="safeClick(this)">Safe Clicks : <span class="clickNum"></span></button>
+                <button hidden class="hint" onclick="changeHint(this)">💡</button>
+                <button hidden class="hint" onclick="changeHint(this)">💡</button>
+                <button hidden class="hint" onclick="changeHint(this)">💡</button>
                 <p><span class="lives"></span></p>
-                <button hidden class="hint" onclick="changeHint(this)">💡</button>
-                <button hidden class="hint" onclick="changeHint(this)">💡</button>
-                <button hidden class="hint" onclick="changeHint(this)">💡</button>
                 <br>
-                <button hidden class="safe" onclick="safeClick(this)">Safe Clicks : <span class="clickNum"></span></button>
             </div>
             <div class="right">
-                <button class="DIY" onclick=" changeLocateMines(this)">locate mines</button>
-                <button class="megaHint" onclick=" changeMegaHint(this)">Mega Hint</button>
+                <button class="button-style" onclick=" changeLocateMines(this)">locate mines</button>
+                <button class="button-style" onclick=" changeMegaHint(this)">Mega Hint</button>
             </div>
             <tbody>
             </tbody>
         </table>
-        <footer>Inbal Avidov</footer>
+        <footer class="button-style">Inbal Avidov</footer>
     <script src="js/utils.js">  </script>
     <script src="js/main.js">  </script>
 </body>
