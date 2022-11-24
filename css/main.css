@@ -1,14 +1,49 @@
 body {
     text-align: center;
     background-image: url(../img/background.jpg);
+   
     background-size: cover;
-    font-family: courier;
+    font-family:monospace ;
 }
 
 h1 {
-    color: rgb(187, 186, 186);
+    color: whitesmoke;
 }
-.level{
+
+.left {
+    float: left;
+    background-color: rgb(135, 135, 135);
+    right: auto;
+    margin-left: 5%;
+    position: relative;
+    bottom: 50%;
+    padding: 20px;
+    padding-top: 10px;
+    width: 160px;
+}
+
+.right {
+    float: right;
+    background-color: rgb(135, 135, 135);
+    margin-right:5%;
+    position: relative;
+    left: auto;
+    bottom: 50%;
+    padding: 20px;
+    padding-top: 10px;
+    width: 160px;
+}
+
+h3 {
+    background-color: lightseagreen;
+    width: 350px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 8px;
+
+}
+
+.level {
     background-color: rgb(65, 63, 63);
     color: whitesmoke;
     border-radius: 20%;
@@ -17,6 +52,7 @@ h1 {
     cursor: pointer;
 
 }
+
 table {
     background-color: rgb(197, 191, 191);
     margin-left: auto;
@@ -25,8 +61,8 @@ table {
 
 .cell {
     cursor: pointer;
-    width: 30px;
-    height: 30px;
+    width: 25px;
+    height: 25px;
     text-align: center;
     font-size: 1.5em;
     border: solid 2px rgb(72, 69, 69);
@@ -37,9 +73,8 @@ table {
 }
 
 .head-line {
-   
     height: 70px;
-    width: 160px;
+    width: 230px;
     background-color: rgb(171, 168, 166);
     margin: auto;
     margin-bottom: 10px;
@@ -47,14 +82,18 @@ table {
 
 .gameMode {
     cursor: pointer;
-    background-color: rgb(244, 120, 120);
+    background-color: rgb(239, 238, 238);
     border: none;
     font-size: 20px;
     margin-bottom: 5px;
-    
+
 }
 
-.hint{
+.lives {
+    background-color: rgb(239, 238, 238);
+}
+
+.hint {
     cursor: pointer;
     background-color: rgb(239, 238, 238);
     border: none;
@@ -62,19 +101,54 @@ table {
     margin-left: 5px;
     font-size: 20px;
 }
-.safe{
+
+.safe {
     cursor: pointer;
     margin-top: 10px;
     margin-left: 3px;
-    background-color: rgb(176, 241, 247);
+    background-color: lightseagreen;
     border: none;
     height: 25px;
     font-size: 15px;
-    font-family: courier;
+    font-family: monospace;
     font-weight: bold;
-
+    
 }
 
-.safe-click{
+.safe-click {
     background-color: green;
+}
+
+.DIY {
+    cursor: pointer;
+    margin-top: 10px;
+    margin-left: 3px;
+    background-color: lightseagreen;
+    border: none;
+    height: 25px;
+    font-size: 15px;
+    font-family: monospace;
+    font-weight: bold;
+    
+}
+.megaHint {
+    cursor: pointer;
+    margin-top: 10px;
+    margin-left: 3px;
+    background-color: lightseagreen;
+    border: none;
+    height: 25px;
+    font-size: 15px;
+    font-family: monospace;
+    font-weight: bold;
+    
+}
+
+footer {
+    background-color: lightseagreen;
+    width: 150px;
+    text-align: center;
+    margin: auto;
+    margin-top: 10px;
+    font-weight: bold;
 }

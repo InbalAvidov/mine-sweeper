@@ -11,25 +11,28 @@
 
 <body onload="initGame(4,2)">
     <h1>Mine Sweeper</h1>
-    <button class="level" onclick="initGame(4,2)">Easy </button>
-    <button class="level" onclick="initGame(8,14)">Medium</button>
-    <button class="level" onclick="initGame(12,32)">Hard</button>
-    <div class="head-line">
-        <h3> timer: <span class="time"></span></h3>
-        <h3> Best Score: <span class="best"></span></h3>
-    </div>
-    <button class="gameMode" onclick="initGame(4,2)"></button>
-    <table>
-        <tbody>
-        </tbody>
-    </table>
-    <p><span class="lives"></span></p>
-    <button hidden class="hint" onclick="changeHint(this)">💡</button>
-    <button hidden class="hint" onclick="changeHint(this)">💡</button>
-    <button hidden class="hint" onclick="changeHint(this)">💡</button>
-    <br>
-    <button hidden class="safe" onclick="safeClick(this)">Safe Clicks : <span class="clickNum">3</span></button>
-
+        <button class="level" onclick="initGame(4,2)">Easy </button>
+        <button class="level" onclick="initGame(8,14)">Medium</button>
+        <button class="level" onclick="initGame(12,32)">Hard</button>
+            <h3> timer: <span class="time"></span> Best Score: <span class="best">0.000</span></h3>
+        <button class="gameMode" onclick="initGame(4,2)"></button>
+        <table>
+            <div class="left">
+                <p><span class="lives"></span></p>
+                <button hidden class="hint" onclick="changeHint(this)">💡</button>
+                <button hidden class="hint" onclick="changeHint(this)">💡</button>
+                <button hidden class="hint" onclick="changeHint(this)">💡</button>
+                <br>
+                <button hidden class="safe" onclick="safeClick(this)">Safe Clicks : <span class="clickNum"></span></button>
+            </div>
+            <div class="right">
+                <button class="DIY" onclick=" changeLocateMines(this)">locate mines</button>
+                <button class="megaHint" onclick=" changeMegaHint(this)">Mega Hint</button>
+            </div>
+            <tbody>
+            </tbody>
+        </table>
+        <footer>Inbal Avidov</footer>
     <script src="js/utils.js">  </script>
     <script src="js/main.js">  </script>
 </body>

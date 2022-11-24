@@ -12,6 +12,8 @@ var gHint
 var seconds
 var gEmptyCells
 var numOfClicks
+var gLocateMines = false
+var gMegaHint = false
 
 
 
@@ -27,6 +29,10 @@ function initGame(size, mines) {
 
 function reset() {
     clearInterval(gTimeInterval)
+    resetFeaturs()
+}
+
+function resetFeaturs() {
     gCountMines = 0
     gFirstClick = false
     gHint = false
@@ -34,14 +40,19 @@ function reset() {
     const elHint = document.querySelectorAll(".hint")
     elHint.forEach((Element) => { Element.hidden = false })
     const elSafe = document.querySelectorAll(".safe")
+    const elclickNums = document.querySelector(".clickNum")
+    elclickNums.innerText = numOfClicks
     elSafe.forEach((Element) => { Element.hidden = false })
+    const elButton = document.querySelector(".DIY")
+    elButton.style.backgroundColor = "lightseagreen"
+    gLocateMines = false
     gElLives = document.querySelector(".lives")
     if (gLevel.mines === 2) {
         gLives = 2
-        gElLives.innerText = '❤️❤️'
+        gElLives.innerText = '🖤🖤'
     } else {
         gLives = 3
-        gElLives.innerText = '❤️❤️❤️'
+        gElLives.innerText = '🖤🖤🖤'
 
     }
     gTimeInterval = ''
@@ -58,7 +69,7 @@ function renderBoard(board) {
         strHTML += '<tr>'
         for (var j = 0; j < board.length; j++) {
             var cell = ''
-            strHTML += `<td data-i="${i}" data-j="${j}"class="cell" onclick="cellClicked(this,${i},${j})"  oncontextmenu="cellMarked(event,this,${i},${j})">${cell}</td>`
+            strHTML += `<td data-i="${i}" data-j="${j}"class="cell" onclick="cellClicked(this,${i},${j})" oncontextmenu="cellMarked(event,this,${i},${j})">${cell}</td>`
         }
         strHTML += '</tr>'
     }
@@ -67,8 +78,16 @@ function renderBoard(board) {
 }
 
 function cellClicked(elCell, i, j) {
-    if (!gTimeInterval) timer()
+    if (gLocateMines) {
+        locateMines(elCell, i, j)
+        return
+    }
     if (!gFirstClick) addMines(i, j)
+    if (!gTimeInterval) timer()
+    if (gMegaHint) {
+        megaHint(elCell, i, j)
+        return
+    }
     if (gHint) {
         hint(i, j)
         return
@@ -78,8 +97,8 @@ function cellClicked(elCell, i, j) {
     if (gBoard[i][j].isMine) {
         str = MINE
         gLives--
-        if (gLives === 2) gElLives.innerText = '❤️❤️'
-        if (gLives === 1) gElLives.innerText = '❤️'
+        if (gLives === 2) gElLives.innerText = '🖤🖤'
+        if (gLives === 1) gElLives.innerText = '🖤'
         if (gLives === 0) gameOver()
     }
     else {
@@ -206,7 +225,6 @@ function checkGameOver() {
 
 }
 
-
 function expandShown(board, posI, posJ) {
     for (var i = posI - 1; i <= posI + 1; i++) {
         if (i < 0 || i >= board.length) continue
@@ -218,6 +236,7 @@ function expandShown(board, posI, posJ) {
 
             if (board[i][j].minesAroundCount === 0) elCell.innerText = ''
             else elCell.innerText = board[i][j].minesAroundCount
+
             elCell.classList.add("isShown")
             if (gHint && !board[i][j].isShown) {
                 board[i][j].isHint = true
@@ -227,6 +246,7 @@ function expandShown(board, posI, posJ) {
         }
     }
 }
+
 function hideNegs(board, posI, posJ) {
     for (var i = posI - 1; i <= posI + 1; i++) {
         if (i < 0 || i >= board.length) continue
@@ -240,15 +260,16 @@ function hideNegs(board, posI, posJ) {
                 board[i][j].isHint = false
 
             }
-
         }
     }
 }
+
 function changeHint(button) {
     if (!gFirstClick) return
     button.hidden = true
     gHint = true
 }
+
 function hint(i, j) {
     expandShown(gBoard, i, j)
     setTimeout(() => { hideNegs(gBoard, i, j) }, 2000)
@@ -279,8 +300,74 @@ function safeClick(elSafe) {
         const elCell = document.querySelector(`[data-i="${i}"][data-j="${j}"] `)
         elCell.classList.add("safe-click")
         setTimeout(() => { elCell.classList.remove("safe-click") }, 1000)
+        console.log('return');
         return
 
-    }else return
+    } else return
+
+}
+
+function changeLocateMines(elButton) {
+    elButton.style.backgroundColor = "rgb(0, 88, 143)"
+    gLocateMines = true
+}
+
+function locateMines(elCell, i, j) {
+    if (gFirstClick) return
+    else {
+        gBoard[i][j].isMine = true
+        gCountMines++
+        console.log(gCountMines);
+
+        if (gCountMines >= gLevel.mines) {
+            gFirstClick = true
+            gLocateMines = false
+            const elButton = document.querySelector(".DIY")
+            elButton.style.backgroundColor="lightseagreen"
+
+        }
+
+
+    }
+    gBoard = setMinesNegsCount(gBoard)
+}
+
+function changeMegaHint(elButton) {
+    if (!gFirstClick) return
+    elButton.style.backgroundColor = "rgb(0, 88, 143)"
+    gMegaHint = true
+}
+function megaHint(elCell, i, j) {
+    console.log('hi');
+    elCell.classList.add("mega")
+    const elCells = document.querySelectorAll(".mega")
+    console.log(elCells);
+    if (elCells.length === 2) {
+        gMegaHint = false
+        const idxIStart = (elCells[0].dataset.i < elCells[1].dataset.i) ? elCells[0].dataset.i : elCells[1].dataset.i
+        const idxIEnd = (elCells[0].dataset.i > elCells[1].dataset.i) ? elCells[0].dataset.i : elCells[1].dataset.i
+        const idxJStart = (elCells[0].dataset.j < elCells[1].dataset.j) ? elCells[0].dataset.j : elCells[1].dataset.j
+        const idxJEnd = (elCells[0].dataset.j > elCells[1].dataset.j) ? elCells[0].dataset.j : elCells[1].dataset.j
+        console.log(idxIStart, idxJStart, idxIEnd, idxJEnd);
+        for (var i = idxIStart; i <= idxIEnd; i++) {
+            for (var j = idxJStart; j <= idxJEnd; j++) {
+                const cellToCover = document.querySelector(`[data-i="${i}"][data-j="${j}"] `)
+                cellToCover.style.backgroundColor = "lightseagreen"
+                cellToCover.classList.add("mega")
+                if (gBoard[i][j].minesAroundCount === 0) cellToCover.innerText = EMPTY
+                else if (gBoard[i][j].isMine) cellToCover.innerText = MINE
+                else cellToCover.innerText = gBoard[i][j].minesAroundCount
+            }
+        }
+        setTimeout(() => { hideMegaHint() }, 2500)
+    }
+
+}
+function hideMegaHint() {
+    const elCovers = document.querySelectorAll(".mega")
+    elCovers.forEach((Element) => {
+        Element.style.backgroundColor = "rgb(197, 191, 191)"
+        Element.innerHTML = EMPTY
+    })
 
 }
