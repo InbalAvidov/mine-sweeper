@@ -9,11 +9,13 @@ var gCountMines
 var gLives
 var gElLives
 var gHint
-var seconds
+var gSeconds
 var gEmptyCells
-var numOfClicks
+var gNumOfClicks
 var gLocateMines = false
 var gMegaHint = false
+var gClickeds
+var gDarkMode = false
 
 
 
@@ -33,16 +35,15 @@ function reset() {
 }
 
 function resetFeaturs() {
+    gClickeds = []
     gCountMines = 0
     gFirstClick = false
     gHint = false
-    numOfClicks = 3
+    gNumOfClicks = 3
     const elHint = document.querySelectorAll(".hint")
     elHint.forEach((Element) => { Element.hidden = false })
     const elclickNums = document.querySelector(".clickNum")
-    elclickNums.innerText = numOfClicks
-    const elButtons = document.querySelector(".button-style")
-    elButtons.style.backgroundColor = "lightseagreen"
+    elclickNums.innerText = gNumOfClicks
     gLocateMines = false
     gElLives = document.querySelector(".lives")
     if (gLevel.mines === 2) {
@@ -67,7 +68,7 @@ function renderBoard(board) {
         strHTML += '<tr>'
         for (var j = 0; j < board.length; j++) {
             var cell = ''
-            strHTML += `<td data-i="${i}" data-j="${j}"class="cell" onclick="cellClicked(this,${i},${j})" oncontextmenu="cellMarked(event,this,${i},${j})">${cell}</td>`
+            strHTML += `<td data-i="${i}" data-j="${j}"class="cell" onclick="cellgClickeds(this,${i},${j})" oncontextmenu="cellMarked(event,this,${i},${j})">${cell}</td>`
         }
         strHTML += '</tr>'
     }
@@ -75,7 +76,7 @@ function renderBoard(board) {
 
 }
 
-function cellClicked(elCell, i, j) {
+function cellgClickeds(elCell, i, j) {
     if (gLocateMines) {
         locateMines(elCell, i, j)
         return
@@ -107,6 +108,7 @@ function cellClicked(elCell, i, j) {
         }
     }
     gBoard[i][j].isShown = true
+    gClickeds.push({ i, j })
     elCell.classList.add("isShown")
     elCell.innerText = str
     checkGameOver()
@@ -184,8 +186,8 @@ function timer() {
     const elTimer = document.querySelector(".time")
     var start = Date.now()
     gTimeInterval = setInterval(() => {
-        seconds = (Date.now() - start) / 1000
-        elTimer.innerText = seconds.toFixed(2)
+        gSeconds = (Date.now() - start) / 1000
+        elTimer.innerText = gSeconds.toFixed(2)
     }, 1)
 }
 
@@ -218,7 +220,7 @@ function checkGameOver() {
         clearInterval(gTimeInterval)
         const elGameMode = document.querySelector(".gameMode")
         elGameMode.innerText = '😎'
-        if (seconds) bestScore(seconds)
+        if (gSeconds) bestScore(gSeconds)
     }
 
 }
@@ -234,8 +236,8 @@ function expandShown(board, posI, posJ) {
 
             if (board[i][j].minesAroundCount === 0) elCell.innerText = ''
             else elCell.innerText = board[i][j].minesAroundCount
-
             elCell.classList.add("isShown")
+            gClickeds.push({ i, j })
             if (gHint && !board[i][j].isShown) {
                 board[i][j].isHint = true
                 if (board[i][j].isMine) elCell.innerText = MINE
@@ -274,20 +276,20 @@ function hint(i, j) {
     gHint = false
 }
 
-function bestScore(seconds) {
+function bestScore(gSeconds) {
     const elBest = document.querySelector(".best")
     var minTime = Infinity
-    if (+seconds < minTime) minTime = seconds
-    elBest.innerText = seconds
+    if (+gSeconds < minTime) minTime = gSeconds
+    elBest.innerText = gSeconds
 }
 
 function safeClick(elSafe) {
     if (!gFirstClick) return
     const clicks = document.querySelector(".clickNum")
-    numOfClicks--
-    if (numOfClicks >= 0) {
-        clicks.innerText = numOfClicks
-        console.log('numOfClicks:', numOfClicks)
+    gNumOfClicks--
+    if (gNumOfClicks >= 0) {
+        clicks.innerText = gNumOfClicks
+        console.log('gNumOfClicks:', gNumOfClicks)
         var i = getRandomInt(0, gBoard.length)
         var j = getRandomInt(0, gBoard.length)
         const currCell = gBoard[i][j]
@@ -321,7 +323,7 @@ function locateMines(elCell, i, j) {
             gFirstClick = true
             gLocateMines = false
             const elButton = document.querySelector(".DIY")
-            elButton.style.backgroundColor="lightseagreen"
+            elButton.style.backgroundColor = "lightseagreen"
 
         }
 
@@ -332,7 +334,6 @@ function locateMines(elCell, i, j) {
 
 function changeMegaHint(elButton) {
     if (!gFirstClick) return
-    elButton.style.backgroundColor = "rgb(0, 88, 143)"
     gMegaHint = true
 }
 function megaHint(elCell, i, j) {
@@ -352,7 +353,7 @@ function megaHint(elCell, i, j) {
                 const cellToCover = document.querySelector(`[data-i="${i}"][data-j="${j}"] `)
                 cellToCover.style.backgroundColor = "lightseagreen"
                 cellToCover.classList.add("mega")
-                if (gBoard[i][j].minesAroundCount === 0) cellToCover.innerText = EMPTY
+                if (gBoard[i][j].minesAroundCount === 0 && !gBoard[i][j].isMine) cellToCover.innerText = EMPTY
                 else if (gBoard[i][j].isMine) cellToCover.innerText = MINE
                 else cellToCover.innerText = gBoard[i][j].minesAroundCount
             }
@@ -364,8 +365,46 @@ function megaHint(elCell, i, j) {
 function hideMegaHint() {
     const elCovers = document.querySelectorAll(".mega")
     elCovers.forEach((Element) => {
-        Element.style.backgroundColor = "rgb(197, 191, 191)"
+        Element.style.backgroundColor = "rgb(197, 191, 191,0.1)"
         Element.innerHTML = EMPTY
     })
 
 }
+
+function undo() {
+    console.log(gClickeds);
+    const lastCell = gClickeds.pop()
+    console.log('lastCell:', lastCell)
+    console.log(gClickeds)
+    const elCell = document.querySelector(`[data-i="${lastCell.i}"][data-j="${lastCell.j}"] `)
+
+    console.log('elCell:', elCell)
+    elCell.innerText = EMPTY
+    elCell.classList.remove("isShown")
+    gBoard[lastCell.i][lastCell.j].isShown = false
+    console.log('gBoard[lastCell.i][lastCell.j]:', gBoard[lastCell.i][lastCell.j])
+}
+
+function darkMode(){ 
+    const elDarkSwitch = document.querySelector(".dark")
+    const elBody = document.querySelector("body")
+    const elH3 = document.querySelector("h3")
+    const elButtons = document.querySelectorAll(".button-style")
+
+    if (gDarkMode){
+        elDarkSwitch.innerText = "Light Mode"
+        elBody.style.backgroundImage= "url(../img/background2.jpg)"
+        elH3.style.backgroundColor = "orangered"
+        elButtons.forEach((Element) => { Element.style.backgroundColor = "orangered" })
+        gDarkMode = !gDarkMode
+        console.log(gDarkMode);
+    }
+    else {
+        elDarkSwitch.innerText = "Dark Mode"
+        elBody.style.backgroundImage= "url(../img/background.jpg)"
+        elH3.style.backgroundColor = "lightseagreen"
+        const elButtons = document.querySelectorAll(".button-style")
+        elButtons.forEach((Element) => { Element.style.backgroundColor = "lightseagreen" })
+        gDarkMode = !gDarkMode
+    }
+    }

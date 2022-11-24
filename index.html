@@ -11,9 +11,9 @@
 
 <body onload="initGame(4,2)">
     <h1>Mine Sweeper</h1>
-        <button class="level" onclick="initGame(4,2)">Easy </button>
-        <button class="level" onclick="initGame(8,14)">Medium</button>
-        <button class="level" onclick="initGame(12,32)">Hard</button>
+        <button class="level" onclick="initGame(4,2)">Easy - 4X4 </button>
+        <button class="level" onclick="initGame(8,14)">Medium - 8X8</button>
+        <button class="level" onclick="initGame(12,32)">Hard - 12X12</button>
             <h3> timer: <span class="time"></span> Best Score: <span class="best">0.000</span></h3>
         <button class="gameMode" onclick="initGame(4,2)"></button>
         <table>
@@ -26,8 +26,12 @@
                 <br>
             </div>
             <div class="right">
-                <button class="button-style" onclick=" changeLocateMines(this)">locate mines</button>
-                <button class="button-style" onclick=" changeMegaHint(this)">Mega Hint</button>
+                <button class="button-style" onclick=" changeLocateMines(this)">Locate mines 💣</button>
+                <button class="button-style" onclick=" changeMegaHint(this)">Mega Hint 💡</button>
+                <br>
+                <button class="button-style back" onclick=" undo()"> 🔙</button>
+                <br>
+                <button class="button-style dark" onclick="darkMode(this)">Dark Mode</button>
             </div>
             <tbody>
             </tbody>
